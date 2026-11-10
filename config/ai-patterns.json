@@ -1,0 +1,21 @@
+{
+  "patterns": [
+    "<script type=\"text/javascript\">",
+    "<iframe[^>]*src=",
+    "<object[^>]*data=",
+    "<embed",
+    "<input[^>]*name=\"search\"",
+    "<form[^>]*action",
+    "?id=",
+    "?page=",
+    "?user=",
+    "?username=",
+    "?email=",
+    "?category=",
+    "?product=",
+    "method=\"POST\"",
+    "method=\"PUT\"",
+    "method=\"DELETE\""
+  ],
+  "version": "2.0.0"
+}

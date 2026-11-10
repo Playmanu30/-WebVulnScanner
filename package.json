@@ -1,0 +1,57 @@
+{
+  "name": "web-vulnerability-scanner-ai",
+  "version": "2.2.1",
+  "description": "Authorised red-team web vulnerability scanner - Electron desktop app that crawls one origin and validates 13 detection modules with evidence",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "npm run build:dev && electron .",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "scan:test": "node src/test/quick-scan.js",
+    "check": "node src/test/check-syntax.js"
+  },
+  "keywords": [
+    "security",
+    "vulnerability-scanner",
+    "web-security",
+    "xss",
+    "sql-injection",
+    "csrf",
+    "ssrf",
+    "cors",
+    "red-team",
+    "penetration-testing",
+    "electron"
+  ],
+  "author": "Playmanu30",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Playmanu30/-WebVulnScanner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Playmanu30/-WebVulnScanner/issues"
+  },
+  "homepage": "https://github.com/Playmanu30/-WebVulnScanner#readme",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "electron": "^45.2.3",
+    "lucide-react": "^0.294.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@babel/preset-react": "^7.23.0",
+    "babel-loader": "^9.1.3",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

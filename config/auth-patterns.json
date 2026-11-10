@@ -1,0 +1,11 @@
+{
+  "patterns": [
+    "<meta[^>]*http-equiv=\"X-UA-Compatible\"",
+    "<script[^>]*src=\".*session.*\"",
+    "<script[^>]*src=\".*auth.*\"",
+    "HttpOnly",
+    "Secure",
+    "SameSite"
+  ],
+  "version": "2.0.0"
+}

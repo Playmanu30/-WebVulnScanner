@@ -1,0 +1,22 @@
+{
+  "patterns": [
+    "<title>Apache",
+    "<title>Nginx",
+    "<title>IIS",
+    "X-Powered-By:",
+    "Server: Apache",
+    "Server: Nginx",
+    "X-AspNet-Version:",
+    "X-AspNetMvc-Version:",
+    "<script[^>]*src=\".*connectionstring.*\"",
+    "<meta[^>]*name=\"description\"[^>]*content=\".*password.*\"",
+    "<title>Error 500",
+    "<title>Internal Server Error",
+    "Traceback",
+    "Stack Trace",
+    "Exception:",
+    "<script[^>]*src=\".*api_key.*\"",
+    "<meta[^>]*name=\"apikey\"[^>]*content=\""
+  ],
+  "version": "2.0.0"
+}

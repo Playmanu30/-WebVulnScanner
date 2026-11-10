@@ -1,0 +1,30 @@
+{
+  "patterns": [
+    "<script[^>]*>",
+    "</script[^>]*>",
+    "javascript:",
+    "vbscript:",
+    "onload\\s*=",
+    "onclick\\s*=",
+    "onerror\\s*=",
+    "onmouseover\\s*=",
+    "onfocus\\s*=",
+    "<iframe",
+    "<img[^>]*src=[^>]*javascript:",
+    "<svg[^>]*onload",
+    "<body[^>]*onload",
+    "<div[^>]*onclick",
+    "<span[^>]*onerror"
+  ],
+  "aiPatterns": [
+    "<script type=\"text/javascript\">",
+    "<script src=",
+    "<iframe[^>]*src=",
+    "<object[^>]*data=",
+    "<embed",
+    "eval\\s*\\(",
+    "document\\.write\\s*\\(",
+    "innerHTML\\s*="
+  ],
+  "version": "2.0.0"
+}
