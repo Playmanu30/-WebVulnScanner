@@ -341,7 +341,8 @@ src/
 │   ├── renderer.jsx           the whole React app
 │   └── public/index.html      HTML template + CSS + CSP meta
 └── test/
-    └── quick-scan.js          CLI wrapper
+    ├── quick-scan.js          CLI wrapper
+    └── check-syntax.js        `npm run check`
 ```
 
 ### Result contract
@@ -406,6 +407,12 @@ No external model is called. The engine is a deterministic correlation layer:
 `ReportGenerator` accepts the aggregate result and produces `json`, `html` or
 `text`. All target-derived text is HTML-escaped, so a reflected payload can never
 break out of the report markup.
+
+Every finding includes severity, confidence, evidence, CWE/OWASP references, the
+source page, remediation steps and the matching playbook. The metadata records
+the crawled-page count and whether the scan was authenticated. Before writing,
+`redactSecrets()` replaces credential headers and URL userinfo with
+`[redacted]`, so an exported report is safe to share.
 
 ## Limitations
 
