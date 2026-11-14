@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.3.0 - aggressive mode fix
+
+Fixes the initialization bug where `--aggressive` flag wasn't being passed to scanner initialization, causing scanners to load default configs instead of advanced patterns.
+
+### Fixed
+
+- **Scanner initialization with options.** The `scan()` method now re-initializes scanners with fresh options (including `{aggressive: true}`) even if they already exist, ensuring aggressive mode toggles work correctly.
+- **CLI flag propagation.** `quick-scan.js` now passes both `{noReport}` and `{aggressive}` flags to `run()`, so the console shows **70** XSS patterns and **2** SQLi payloads (not 15/6).
+
+### Changed
+
+- **Version bumped:** 2.2.1 → 2.3.0
+- **Aggressive mode verified:** Higher concurrency (8-12), deeper crawl (depth 5, max pages 50), more per-page probes (12 vs 4), and advanced WAF-bypass patterns for XSS/SQLi detection all work correctly.
+
 ## 2.2.1 - guardrail hardening
 
 Turns the safety claims into enforced behaviour and tests them.

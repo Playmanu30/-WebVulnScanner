@@ -16,7 +16,7 @@ class XSSDetector {
     this.name = 'XSS Detector';
     this.description =
       'Tests query/form parameters for reflected Cross-Site Scripting and flags risky inline script usage.';
-    this.version = '2.2.1';
+    this.version = '2.3.0'; // Bumped for aggressive mode
     this.staticPatterns = [];
     this.configSource = 'defaults';
     this.maxParams = 6;
@@ -25,11 +25,14 @@ class XSSDetector {
     this.pageInterest = /^(q|s|search|query|keyword|term|name|email|comment|message|id|page|cat|category|product|item|user|username|ref)$/i;
   }
 
-  async initialize() {
-    const { values, source } = loadList('xss-patterns.json', ['patterns'], []);
+  async initialize(options = {}) {
+    // Aggressive mode: load advanced patterns; default: standard patterns
+    const configFile = (options.aggressive === true) ? 'xss-aggressive-patterns.json' : 'xss-patterns.json';
+    const { values, source } = loadList(configFile, ['patterns'], []);
     this.staticPatterns = values;
-    this.configSource = source;
-    console.log(`[xss] ${this.staticPatterns.length} static patterns (config: ${this.configSource})`);
+    
+    const aggressiveMsg = (options.aggressive === true) ? ' [AGGRESSIVE]' : '';
+    console.log(`[xss] ${this.staticPatterns.length} static patterns${aggressiveMsg} (config: ${source})`);
   }
 
   async scan(url, options = {}) {

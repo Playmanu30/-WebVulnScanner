@@ -4,7 +4,7 @@
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![Electron](https://img.shields.io/badge/electron-45-47848F.svg)](https://www.electronjs.org)
 [![Platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey.svg)](#requirements)
-[![Version](https://img.shields.io/badge/version-2.2.1-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](CHANGELOG.md)
 
 An authorised red-team **reconnaissance and detection** desktop tool built with
 Electron and React. It crawls one origin, ranks the pages that expose the most
@@ -184,6 +184,40 @@ Findings          : 27
   - low     : 6
 Security score    : 0/100 (risk: High)
 ```
+
+### Aggressive mode
+
+Enable aggressive scanning with higher concurrency, deeper crawl, more probes per page, and advanced WAF-bypass patterns for XSS/SQLi detection:
+
+```powershell
+npm run scan:test -- http://target.com --aggressive
+```
+
+**Aggressive mode overrides:**
+
+| Parameter | Default | Aggressive |
+|-----------|---------|------------|
+| Concurrency | 3 | 8-12 |
+| Delay | 40 ms | 0 ms |
+| Crawl depth | 2 | 5 |
+| Max pages | 12 | 50 |
+| Per-page probes | 4 | 12 |
+
+### CLI flags
+
+```powershell
+npm run scan:test -- http://target.com [flags]
+```
+
+**Available flags:**
+
+- `--aggressive` - Enable aggressive mode (higher concurrency, deeper crawl, advanced patterns)
+- `--no-report` - Skip JSON/HTML report generation
+- `--maxPages=N` - Override max pages (default: 12, aggressive: 50)
+- `--perPageLimit=N` - Override per-page probes (default: 4, aggressive: 12)
+- `--depth=N` - Override crawl depth (default: 2, aggressive: 5)
+- `--concurrency=N` - Override concurrency (default: 3, aggressive: 8-12)
+- `--delayMs=N` - Override request delay in ms (default: 40, aggressive: 0)
 
 ## The desktop UI
 

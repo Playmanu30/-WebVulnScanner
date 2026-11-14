@@ -1,6 +1,6 @@
 {
   "name": "web-vulnerability-scanner-ai",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Authorised red-team web vulnerability scanner - Electron desktop app that crawls one origin and validates 13 detection modules with evidence",
   "main": "src/main.js",
   "scripts": {

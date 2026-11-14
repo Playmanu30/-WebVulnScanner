@@ -33,7 +33,10 @@ const TYPE_META = {
 };
 
 const MAX_FINDINGS_PER_TYPE = 12;
-const DEFAULT_CONCURRENCY = 3;
+// Aggressive defaults: higher concurrency, lower delay, deeper crawl
+const DEFAULT_CONCURRENCY = 8;
+const AGGRESSIVE_DELAY_MS = 0; // No delay between requests for speed
+const POLITE_DELAY_MS = 40;    // Default polite mode
 
 /** Run `handler` over `items` with a fixed number of workers. */
 async function runPool(items, limit, handler) {
@@ -121,20 +124,24 @@ function selectProbePages(pages, limit, interest) {
 class ScannerEngine {
   constructor() {
     this.name = 'AI Web Vulnerability Scanner Engine';
-    this.version = '2.2.1';
+    this.version = '2.3.0'; // Bumped for aggressive mode
     this.scanners = [];
     this.aiEngine = new AIAnalysisEngine();
     this.crawler = new Crawler();
     this.onProgressCallback = null;
     this.cancelled = false;
     this.requestsSent = 0;
+    this.aggressiveMode = false;
   }
 
   cancel() {
     this.cancelled = true;
   }
 
-  async initialize() {
+  async initialize(options = {}) {
+    // Enable aggressive mode if requested
+    this.aggressiveMode = options.aggressive === true;
+
     this.scanners = [
       new HeaderAnalyzer(),
       new InformationDisclosureScanner(),
@@ -152,12 +159,22 @@ class ScannerEngine {
     ];
 
     for (const scanner of this.scanners) {
-      await scanner.initialize();
+      // First, propagate the aggressiveMode flag before calling initialize()
+      if (this.aggressiveMode && !scanner.aggressiveMode) {
+        scanner.aggressiveMode = true;
+      }
+      
+      // Then call initialize with options that include both flags for consistency
+      const initOptions = { ...options, aggressive: this.aggressiveMode };
+      await scanner.initialize(initOptions);
     }
     await this.aiEngine.initialize();
+    
+    const aggressiveMsg = this.aggressiveMode ? ' [AGGRESSIVE MODE]' : '';
     console.log(
       `[engine] initialized with ${this.scanners.length} scanners ` +
-        `(${this.scanners.filter((s) => s.runsPerPage).length} per-page)`
+        `(${this.scanners.filter((s) => s.runsPerPage).length} per-page)` +
+        `${aggressiveMsg}`
     );
     return this.scanners.length;
   }
@@ -172,7 +189,8 @@ class ScannerEngine {
   }
 
   async scan(url, options = {}) {
-    if (this.scanners.length === 0) await this.initialize();
+    if (this.scanners.length === 0) await this.initialize(options);
+    else await this.initialize(options); // Re-initialize with new options to support aggressive mode toggle
 
     this.cancelled = false;
     this.requestsSent = 0;
@@ -188,7 +206,8 @@ class ScannerEngine {
     }
 
     const startedAt = Date.now();
-    setRequestDelay(options.delayMs ?? 40);
+    // Aggressive mode: no delay. Polite mode: 40ms between requests.
+    setRequestDelay(options.delayMs ?? (options.aggressive === true ? AGGRESSIVE_DELAY_MS : POLITE_DELAY_MS));
 
     // Credentials apply to every scanner through fetchPage(), always scoped to
     // the target origin.
@@ -203,14 +222,14 @@ class ScannerEngine {
       clearAuth();
     }
 
-    const maxPages = Number(options.maxPages) > 0 ? Number(options.maxPages) : 12;
+    const maxPages = Number(options.maxPages) > 0 ? Number(options.maxPages) : (options.aggressive === true ? 50 : 12);
     this.emit({ status: 'section', phase: 'crawl', url, percent: 0, scanner: 'Crawler' });
 
     let pages;
     try {
       pages = await this.crawler.crawl(url, {
         maxPages,
-        maxDepth: options.depth ?? options.maxDepth ?? 2,
+        maxDepth: options.depth ?? options.maxDepth ?? (options.aggressive === true ? 5 : 2),
         timeout: options.timeout || 15000,
         isCancelled: () => this.cancelled,
         onPage: (page, index, total) => {
@@ -342,7 +361,8 @@ class ScannerEngine {
    */
   buildTasks(pages, options) {
     const root = pages[0];
-    const perPageLimit = Number(options.perPageLimit) > 0 ? Number(options.perPageLimit) : 4;
+    // Aggressive mode: more probe pages. Default: 4 per-page probes.
+    const perPageLimit = Number(options.perPageLimit) > 0 ? Number(options.perPageLimit) : (options.aggressive === true ? 12 : 4);
     const tasks = [];
 
     for (const scanner of this.scanners) {

@@ -18,7 +18,7 @@ class SQLInjectionDetector {
     this.name = 'SQL Injection Detector';
     this.description =
       'Probes URL and GET-form parameters with quote payloads and looks for database error leakage.';
-    this.version = '2.2.1';
+    this.version = '2.3.0'; // Bumped for aggressive mode
     this.testPayloads = [];
     this.configSource = 'defaults';
     this.maxParams = 5;
@@ -37,9 +37,11 @@ class SQLInjectionDetector {
     this.blindRunning = false;
   }
 
-  async initialize() {
+  async initialize(options = {}) {
+    // Aggressive mode: load advanced patterns; default: safe quote probes only
+    const configFile = (options.aggressive === true) ? 'sql-aggressive-patterns.json' : 'sql-patterns.json';
     const { values, source } = loadList(
-      'sql-patterns.json',
+      configFile,
       ['payloads', 'patterns'],
       ["'", '"', "'\""]
     );
@@ -47,9 +49,10 @@ class SQLInjectionDetector {
     // Only quote-based probes are used; the rest of the config is kept for reference.
     this.testPayloads = values.filter((p) => typeof p === 'string' && !DESTRUCTIVE.test(p));
     if (this.testPayloads.length === 0) this.testPayloads = ["'", '"'];
-    this.configSource = source;
+    
+    const aggressiveMsg = (options.aggressive === true) ? ' [AGGRESSIVE]' : '';
     console.log(
-      `[sql-injection] ${this.testPayloads.length} safe quote probes (config: ${this.configSource})`
+      `[sql-injection] ${this.testPayloads.length} safe quote probes${aggressiveMsg} (config: ${source})`
     );
   }
 
